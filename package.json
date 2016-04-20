@@ -1,6 +1,6 @@
 {
-  "name": "OpenShift-Sample-App",
-  "version": "1.0.0",
+  "name": "Test Clientes",
+  "version": "0.1.0",
   "description": "OpenShift Sample Application",
   "keywords": [
     "OpenShift",
@@ -9,11 +9,11 @@
     "openshift"
   ],
   "author": {
-    "name": "OpenShift",
-    "email": "ramr@example.org",
-    "url": "http://www.openshift.com/"
+    "name": "phipex",
+    "email": "phipex@yahoo.com",
+    "url": "http://server-phipex.rhcloud.com"
   },
-  "homepage": "http://www.openshift.com/",
+  "homepage": "http://server-phipex.rhcloud.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/openshift/origin-server"
