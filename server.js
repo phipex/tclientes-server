@@ -12,6 +12,7 @@ require('./models/user');
 
 var auth = require('./auth');  
 var middleware = require('./middleware');
+var client = require('./controllers/client');
 
 // Configuramos Express
 var app = express();  
@@ -41,7 +42,20 @@ router.get('/', function(req, res){
 router.post('/auth/signup', auth.emailSignup);  
 router.post('/auth/login', auth.emailLogin);
 
+
+//rutas del crud de clientes
+router.route('/clients')
+    .get(client.findAllClients)
+    .post(client.addClient);
+
+router.route('/tvshows/:id')
+    .get(client.findById)
+    .put(client.updateClient)
+    .delete(client.deleteClient);
+
+
 // Ruta solo accesible si estás autenticado
+//TODO solo para prueba borrar
 router.get('/private',middleware.ensureAuthenticated, function(req, res) {
 	res.send({messaje:"desde un lugar privado"});
 });
@@ -54,7 +68,7 @@ mongoose.connect(mongo, function(err) {
     // Comprobar errores siempre
     if (!err) {
         var port = app.get('port');
-        var ip = app.get('ip')
+        var ip = app.get('ip');
 
         // app.listen(port, function(){
         //     console.log('Express corriendo en http://localhost:'+port);
