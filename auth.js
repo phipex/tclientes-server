@@ -2,6 +2,10 @@
 var mongoose = require('mongoose');  
 var User = mongoose.model('User');  
 var service = require('./services');
+// Importamos nuestros modelos, 
+// en este ejemplo nuestro modelo de usuario
+require('./models/user');
+
 
 //TODO pasar a util
 function validateEmail(email) {
