@@ -9,9 +9,11 @@ var config = require('./config');
 // Importamos nuestros modelos, 
 // en este ejemplo nuestro modelo de usuario
 require('./models/user');
+require('./models/client');
 
 var auth = require('./auth');  
 var middleware = require('./middleware');
+var client = require('./controllers/client');
 
 // Configuramos Express
 var app = express();  
@@ -41,7 +43,20 @@ router.get('/', function(req, res){
 router.post('/auth/signup', auth.emailSignup);  
 router.post('/auth/login', auth.emailLogin);
 
+
+//rutas del crud de clientes
+router.route('/v1/clients')
+    .get(middleware.ensureAuthenticated,client.findAllClients)
+    .post(middleware.ensureAuthenticated,client.addClient);
+
+router.route('/v1/clients/:cid')
+    .get(middleware.ensureAuthenticated,client.findById)
+    .put(middleware.ensureAuthenticated,client.updateClient)
+    .delete(middleware.ensureAuthenticated,client.deleteClient);
+
+
 // Ruta solo accesible si estás autenticado
+//TODO solo para prueba borrar
 router.get('/private',middleware.ensureAuthenticated, function(req, res) {
 	res.send({messaje:"desde un lugar privado"});
 });
@@ -54,7 +69,7 @@ mongoose.connect(mongo, function(err) {
     // Comprobar errores siempre
     if (!err) {
         var port = app.get('port');
-        var ip = app.get('ip')
+        var ip = app.get('ip');
 
         // app.listen(port, function(){
         //     console.log('Express corriendo en http://localhost:'+port);
@@ -62,6 +77,8 @@ mongoose.connect(mongo, function(err) {
         app.listen(port, ip, function(){
           console.log("Listening on " + ip + ", server_port " + port)
         });	
+    }else{
+        console.log(err.message);
     }
     
 });
