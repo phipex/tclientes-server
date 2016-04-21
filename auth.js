@@ -4,7 +4,7 @@ var User = mongoose.model('User');
 var service = require('./services');
 // Importamos nuestros modelos, 
 // en este ejemplo nuestro modelo de usuario
-require('./models/user');
+//require('./models/user');
 
 
 //TODO pasar a util
@@ -46,6 +46,7 @@ exports.emailSignup = function(req, res) {
         });
 
         user.save(function(err){
+            //TODO reportar el error
             return res
                 .status(200)
                 .send({error:false,token: service.createToken(user)});

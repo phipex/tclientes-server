@@ -9,6 +9,7 @@ var config = require('./config');
 // Importamos nuestros modelos, 
 // en este ejemplo nuestro modelo de usuario
 require('./models/user');
+require('./models/client');
 
 var auth = require('./auth');  
 var middleware = require('./middleware');
@@ -44,14 +45,14 @@ router.post('/auth/login', auth.emailLogin);
 
 
 //rutas del crud de clientes
-router.route('/clients')
-    .get(client.findAllClients)
-    .post(client.addClient);
+router.route('/v1/clients')
+    .get(middleware.ensureAuthenticated,client.findAllClients)
+    .post(middleware.ensureAuthenticated,client.addClient);
 
-router.route('/tvshows/:id')
-    .get(client.findById)
-    .put(client.updateClient)
-    .delete(client.deleteClient);
+router.route('/v1/clients/:cid')
+    .get(middleware.ensureAuthenticated,client.findById)
+    .put(middleware.ensureAuthenticated,client.updateClient)
+    .delete(middleware.ensureAuthenticated,client.deleteClient);
 
 
 // Ruta solo accesible si estás autenticado

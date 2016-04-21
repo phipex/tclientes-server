@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
 
 var clientSchema = new Schema({  
   name:    { type: String },
-  id:  { type: String },
+  cid:  { type: String },
   state:    { type: Number, enum:
   [
     0,//inactivo
