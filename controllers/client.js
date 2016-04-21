@@ -39,38 +39,51 @@ exports.addClient = function(req, res) {
     console.log(req.body);
 
     var body = req.body;
-    if(body.name && body.cid && body.state){
-        var client = new Client({
-            name:    req.body.name,
-            cid:  	req.body.cid,//TODO verificar que no exista
-            state:    req.body.state//TODO verificar el estado
-
-        });
-
-        client.save(function(err, client) {
-            if(err) return res.status(500).send({error:true,message:err.message} );
-            res.status(200).jsonp(client);
-        });
-    }else{
+    if (!(body.name && body.cid && body.state)) {
         res
             .status(400)
-            .send({error:true,message: "No se ingresaron los datos correctamente"});
+            .send({error: true, message: "No se ingresaron los datos correctamente"});
+    } else {
+        var client = new Client({
+            name: req.body.name,
+            cid: req.body.cid,//TODO verificar que no exista
+            state: req.body.state//TODO verificar el estado
+
+        });
+
+        client.save(function (err, client) {
+            if (err){
+                return res.status(500).send({error: true, message: err.message});
+            }
+            res.status(200).jsonp(client);
+        });
     }
 
 };
 
 //PUT - Update a register already exists
 exports.updateClient = function(req, res) {  
-    Client.findById(req.params.cid, function(err, client) {
-        client.name   = req.body.name;
-        client.cid    = req.body.cid;//TODO verificar si existe
-        client.state = req.body.state;//TODO verificar el estado
-        
+    console.log(req.params.cid);
+    Client.find({cid:req.params.cid} , function(err, client) {
+        client = client[0];
+        if(client){
+            console.log(client);
+            client.name   = req.body.name;
+            //client.cid    = req.body.cid;//TODO verificar si existe
+            client.state = req.body.state;//TODO verificar el estado
 
-        client.save(function(err) {
-            if(err) return res.status(500).send(err.message);
-      		res.status(200).jsonp(client);
-        });
+
+            client.save(function(err) {
+                if(err){
+                    return res.status(500).send(err.message);
+                }
+                res.status(200).jsonp(client);
+            });
+        }else{
+            return res.status(404).send({error:true,message:"Cliente no encontrado"});
+        }
+
+
     });
 };
 
@@ -78,7 +91,9 @@ exports.updateClient = function(req, res) {
 exports.deleteClient = function(req, res) {  
     Client.findById(req.params.cid, function(err, client) {
         client.remove(function(err) {
-            if(err) return res.status(500).send(err.message);
+            if(err){
+                return res.status(500).send(err.message);
+            }
       		res.status(200).send();
         })
     });

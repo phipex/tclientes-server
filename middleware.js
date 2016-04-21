@@ -22,10 +22,18 @@ exports.ensureAuthenticated = function(req, res, next) {
     req.user = payload.sub;
     next();
   }catch(error){
-    console.log(error);
-    return res
-           .status(401)
+    console.log(error, error == "Error: Token expired");
+    if(error == "Error: Token expired"){
+      return res
+          .status(401)
+          .send({error:true,message: "El token ha expirado"});
+    }else{
+      return res
+          .status(401)
           .send({error:true,message: "Token Invalido"});
+    }
+
+
   }
   
-}
+};

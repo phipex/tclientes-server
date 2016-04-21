@@ -77,6 +77,8 @@ mongoose.connect(mongo, function(err) {
         app.listen(port, ip, function(){
           console.log("Listening on " + ip + ", server_port " + port)
         });	
+    }else{
+        console.log(err.message);
     }
     
 });
